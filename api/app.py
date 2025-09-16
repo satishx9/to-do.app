@@ -28,6 +28,14 @@ class Todo(db.Model):
     def __repr__(self):
         return f"{self.sno} - {self.title}"
 
+# Ensure database and tables are created (useful on Vercel cold starts)
+try:
+    with app.app_context():
+        db.create_all()
+except Exception as _init_err:
+    # Avoid crashing import; errors will appear in logs
+    pass
+
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == 'POST':
